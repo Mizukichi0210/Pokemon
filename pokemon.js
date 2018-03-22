@@ -1,6 +1,5 @@
 var Botkit = require("botkit");
 var mysql = require('mysql');
-var sleep = require('sleep-async')();
 
 var con = mysql.createConnection({
   host     : 'localhost',

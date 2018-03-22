@@ -47,5 +47,6 @@ controller.hears(["(.*)"], [ 'direct_message' ], (bot, message) => {
 			bot.reply(message, 'レベル : ' + rows[0].level + '\n トレーナー名 : ' + trainer_name + '\n 持ち物 : ' + rows[0].item + '\n 技1 : ' + rows[0].move1 + '\n 技2 : ' + rows[0].move2 + '\n 技3 : ' + rows[0].move3 + '\n 技4 : ' + rows[0].move4);
 		});
 		//console.log(rows);
+		bot.reply(message, 'abc');
 	});
 });

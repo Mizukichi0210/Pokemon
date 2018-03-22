@@ -9,8 +9,10 @@ I did not create an app to register.
 It will be created in the future.
 
 The database structure is as follows.
+
 table: pokemon
 Column: ID (primary key), level(varchar 4), name(varchar 11), trainer_id(varchar 4), item(varchar 20), move1(varchar 20), move2, move3, move4, effort_value(varchar 25)
+
 table: trainer
 Column: ID (primary key), name(varchar 11), trainer_id(varchar 11)
 

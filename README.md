@@ -1,6 +1,6 @@
 # Pokemon Management Tool
 Overview
-Pokemon management tool using Slack and PHPMyadmin.
+Pokemon management tool using Slack and PHPMyAdmin.
 
 ## Description
 Use botkit to manage Pokemon used in network play.

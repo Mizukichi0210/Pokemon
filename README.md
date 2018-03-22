@@ -18,6 +18,7 @@ Column: ID (primary key), name(varchar 11), trainer_id(varchar 11)
 
 ## Requirement
 Botkit
+
 mysql
 
 ## Usage

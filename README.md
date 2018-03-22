@@ -5,6 +5,7 @@ Pokemon management tool using Slack and PHPMyadmin.
 ## Description
 Use botkit to manage Pokemon used in network play.
 By sending the nickname of Pokemon in a direct message, this Bot responds with detailed data of the corresponding Pokemon.
+
 I did not create an app to register.
 It will be created in the future.
 

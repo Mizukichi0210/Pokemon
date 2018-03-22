@@ -13,6 +13,8 @@ By sending the nickname of Pokemon in a direct message, this Bot responds with d
 I did not create an app to register.
 It will be created in the future.
 
+
+
 The database structure is as follows.
 
 table: pokemon

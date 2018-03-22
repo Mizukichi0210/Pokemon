@@ -1,4 +1,3 @@
-//xoxb-334249084562-zAR0JovNNJY1vD1h6B3g5hLm
 var Botkit = require("botkit");
 var mysql = require('mysql');
 var sleep = require('sleep-async')();
@@ -32,21 +31,17 @@ controller.hears(["(.*)"], [ 'direct_message' ], (bot, message) => {
 	var searchSql = 'select * from pokemon where name = ?';
 	con.query(searchSql,[name], function(err, rows, fields){
 		if(err) {
-			bot.reply(message,'データなし');
 			 console.log('err: ' + err); 
 		}
 		trainer_id = rows[0].trainer_id;
 		var trainerSql = 'select * from trainer where ID = ?';
 		con.query(trainerSql,[trainer_id], function(err,result,fields){
 			if(err) {
-				bot.reply(message,'データなし');
 				console.log('err: ' + err);
 			}
 			trainer_name = result[0].name;
 ;
 			bot.reply(message, 'レベル : ' + rows[0].level + '\n トレーナー名 : ' + trainer_name + '\n 持ち物 : ' + rows[0].item + '\n 技1 : ' + rows[0].move1 + '\n 技2 : ' + rows[0].move2 + '\n 技3 : ' + rows[0].move3 + '\n 技4 : ' + rows[0].move4);
 		});
-		//console.log(rows);
-		bot.reply(message, 'abc');
 	});
 });

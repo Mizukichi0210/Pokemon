@@ -41,7 +41,7 @@ controller.hears(["(.*)"], [ 'direct_message' ], (bot, message) => {
 			}
 			trainer_name = result[0].name;
 ;
-			bot.reply(message, 'レベル : ' + rows[0].level + '\n トレーナー名 : ' + trainer_name + '\n 持ち物 : ' + rows[0].item + '\n 技1 : ' + rows[0].move1 + '\n 技2 : ' + rows[0].move2 + '\n 技3 : ' + rows[0].move3 + '\n 技4 : ' + rows[0].move4);
+			bot.reply(message, 'レベル : ' + rows[0].level + '\n トレーナー名 : ' + trainer_name + '\n 持ち物 : ' + rows[0].item + '\n 技1 : ' + rows[0].move1 + '\n 技2 : ' + rows[0].move2 + '\n 技3 : ' + rows[0].move3 + '\n 技4 : ' + rows[0].move4 + '\n 努力値 : ' + rows[0].effort_value);
 		});
 	});
 });

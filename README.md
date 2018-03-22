@@ -21,12 +21,20 @@ table: trainer
 Column: ID (primary key), name(varchar 11), trainer_id(varchar 11)
 
 ## Requirement
+Slack's workspace
+
+Slack API
+
+PHPMyAdmin(xampp)
+
 Botkit
 
 mysql
 
 ## Usage
 Slack's Bot using Botkit.
+
+Just send the nickname of Pokemon registered in mysql with a direct message.
 
 ## Author
 Mizukichi0210

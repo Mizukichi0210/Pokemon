@@ -1,0 +1,25 @@
+{
+  "name": "pokemon",
+  "version": "1.0.0",
+  "description": "",
+  "main": "pokemon.js",
+  "dependencies": {
+    "botkit": "^0.6.12",
+    "mysql": "^2.15.0",
+    "sleep-async": "^1.0.1"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Mizukichi0210/Pokemon.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Mizukichi0210/Pokemon/issues"
+  },
+  "homepage": "https://github.com/Mizukichi0210/Pokemon#readme"
+}

@@ -9,8 +9,7 @@ var con = mysql.createConnection({
 });
 
 var controller = Botkit.slackbot({
-  debug: false       // デバッグしない
-  //stats_optout: true  // 統計情報を送信しない
+  debug: false       
   // include "log: false" to disable logging
   // or a "logLevel" integer from 0 to 7 to adjust logging verbosity
 })

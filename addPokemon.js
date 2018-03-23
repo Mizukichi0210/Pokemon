@@ -41,9 +41,8 @@ controller.hears(["(.*)"], [ 'direct_message' ], (bot, message) => {
 		
 		var insertSql = "insert into pokemon(level,name,trainer_id,item,move1,move2,move3,move4,effort_value) values (?,?,?,?,?,?,?,?,?)";
 		con.query(insertSql,[level,nickname,trainer_id,item,move1,move2,move3,move4,effort_value], function(err,res){
-			console.log(res);
+			bot.reply(message,"登録しました！");
 		});
 	});
-
 
 });

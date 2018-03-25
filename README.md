@@ -58,6 +58,6 @@ Thank you for viewing!
 日本語が書けることを知ったので，日本語を追加しました．あまり使えるようなものではありませんが，最後まで閲覧ありがとうございます．
 
 ## References
-@chooser SlackのBotkitをWindowsで実行する(https://qiita.com/chooser/items/ba6fa39b12102337c8b3)
+@chooser : SlackのBotkitをWindowsで実行する(https://qiita.com/chooser/items/ba6fa39b12102337c8b3)
 
-@potato4d Botkitを利用してSlack上の発言からGitHubのIssueを作成するBotを作る(https://qiita.com/potato4d/items/81e9e8aef6cd57c234af)
+@potato4d : Botkitを利用してSlack上の発言からGitHubのIssueを作成するBotを作る(https://qiita.com/potato4d/items/81e9e8aef6cd57c234af)

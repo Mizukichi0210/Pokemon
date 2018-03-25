@@ -56,3 +56,6 @@ Sorry for my poor English.
 Thank you for viewing!
 
 日本語が書けることを知ったので，日本語を追加しました．あまり使えるようなものではありませんが，最後まで閲覧ありがとうございます．
+
+## References
+chooser SlackのBotkitをWindowsで実行する(https://qiita.com/chooser/items/ba6fa39b12102337c8b3)

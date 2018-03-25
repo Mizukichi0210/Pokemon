@@ -1,7 +1,0 @@
-@startuml
-title Pokemon
-
-state Trainer
-state Pokemon
-
-@enduml

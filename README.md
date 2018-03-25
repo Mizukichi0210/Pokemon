@@ -5,15 +5,16 @@ It is Japanese only.
 
 Pokemon management tool using Slack and PHPMyAdmin.
 
+Pokemon.js is the main Bot.
+
+addPokemon.js and addTrainer.js are Bot for registering data for using Pokemon.js.
+
 ## Description
 Use botkit to manage Pokemon used in network play.
 
 By sending the nickname of Pokemon in a direct message, this Bot responds with detailed data of the corresponding Pokemon.
 
-I did not create an app to register.
-It will be created in the future.
-
-
+In addPokemon and addTrainer, if you send help as a direct message, the data input method will be answered in Japanese.
 
 The database structure is as follows.
 

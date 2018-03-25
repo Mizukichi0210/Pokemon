@@ -12,9 +12,9 @@ By sending help with a direct message, you can check how to add Pokemon Trainer 
 ダイレクトメッセージでhelpと送信することで，ポケモン・トレーナーの追加方法とあなたが登録したポケモンの確認が行える．
 
 ## Description
-Use botkit to manage Pokemon used in network play.
+As a main objective,use botkit to manage Pokemon used in network play.
 
-ネット対戦で使用するポケモンの管理をBotkitを使って行う．
+主目的として，ネット対戦で使用するポケモンの管理をBotkitを使って行う．
 
 The database structure is as follows.
 
@@ -31,9 +31,9 @@ Column: ID (primary key), name(varchar 11), trainer_id(varchar 11)
 ## Requirement
 Slack's workspace
 
-Slack API
+Slack's API token
 
-PHPMyAdmin(xampp)]
+PHPMyAdmin(xampp)
 
 node.js v8.9.4
 
@@ -42,11 +42,6 @@ npm version 5.6.0
 Botkit(npm i -S botkit)
 
 mysql(npm install mysql –save)
-
-## Usage
-Slack's Bot using Botkit.
-
-Just send the nickname of Pokemon registered in mysql with a direct message.
 
 ## Author
 Mizukichi0210
@@ -59,7 +54,9 @@ Sorry for my poor English.
 
 Thank you for viewing!
 
-日本語が書けることを知ったので，日本語を追加しました．あまり使えるようなものではありませんが，最後まで閲覧ありがとうございます．
+日本語が書けることを知ったので，日本語を追加しました．
+
+あまり使えるようなものではありませんが，最後まで閲覧ありがとうございます．
 
 ## References
 @potato4d : Botkitを利用してSlack上の発言からGitHubのIssueを作成するBotを作る(https://qiita.com/potato4d/items/81e9e8aef6cd57c234af)

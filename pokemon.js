@@ -92,7 +92,7 @@ controller.hears(["(素早さ)"], [ 'direct_message' ], (bot, message) => {
 		fastSpeed = Math.floor(((Number(rows[0].speed) + 31/2 + 252/8) + 5) * 1.1);
 		semiSpeedScarf = Math.floor(((Number(rows[0].speed) +31/2 + 252/8) + 5) * 1.5);
 		semiSpeed = Math.floor(((Number(rows[0].speed) +31/2 + 252/8) + 5));
-		bot.reply(message, "*スカーフ最速* : " + highestSpeed + "\n*スカーフ準速* : " + semiSpeedScarf + "\n*性格S補正 最速* : " + fastSpeed + "\n*性格無補正 最速* : " + semiSpeed);
+		bot.reply(message, "*スカーフ最速* : " + fastestScarf + "\n*スカーフ準速* : " + semiSpeedScarf + "\n*性格S補正 最速* : " + fastSpeed + "\n*性格無補正 最速* : " + semiSpeed);
 	}); 
 });
 

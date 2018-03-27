@@ -30,7 +30,7 @@ Column: ID (primary key), name(varchar 11), trainer_id(varchar 11)
 
 table: pokedex
 
-Column: ID(primary key),name(varchar 7),type1(varchar 6),type2,ability1(varchar 10),ability2,hidden_ability,hp(varchar 4),attack,defense,special_attack,special_defense,speed,sum
+Column: ID (primary key), name(varchar 7), type1(varchar 6), type2, ability1(varchar 10), ability2, hidden_ability, hp(varchar 4), attack, defense, special_attack, special_defense, speed, sum
 
 ## Requirement
 Slack's workspace

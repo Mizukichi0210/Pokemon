@@ -87,9 +87,9 @@ controller.hears(["(素早さ)"], [ 'direct_message' ], (bot, message) => {
 	
 	var sql = "select * from pokedex where name like '%' ? '%'";
 	con.query(sql,[pokemon],function(err,rows,fields){
-		highestSpeed = Math.floor(((Number(rows[0].speed) + Math.floor(31/2) + Math.floor(252/8)) + 5) * 1.1 * 1.5);
-		highSpeed = Math.floor(((Number(rows[0].speed) + Math.floor(31/2) + Math.floor(252/8)) + 5) * 1.1);
-		middleSpeed = ((Number(rows[0].speed) + Math.floor(31/2) + Math.floor(252/8)) + 5);
+		highestSpeed = Math.floor(((Number(rows[0].speed) + 31/2 + 252/8) + 5) * 1.1 * 1.5);
+		highSpeed = Math.floor(((Number(rows[0].speed) + 31/2 + 252/8) + 5) * 1.1);
+		middleSpeed = ((Number(rows[0].speed) +31/2 + 252/8) + 5);
 		bot.reply(message, ">スカーフ最速 : " + highestSpeed + "\n>性格S補正 最速 : " + highSpeed + "\n>性格無補正 最速 : " + middleSpeed);
 	}); 
 });

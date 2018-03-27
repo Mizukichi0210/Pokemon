@@ -79,6 +79,10 @@ controller.hears(["(ポケモン確認)"], [ 'direct_message' ], (bot, message) 
 	});
 });
 
+controller.hears(["(素早さ)"], [ 'direct_message' ], (bot, message) => {
+	
+});
+
 controller.hears(["(.*)"], [ 'direct_message' ], (bot, message) => {
 	bot.reply(message,"*help* 参照");
 });

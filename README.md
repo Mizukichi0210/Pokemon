@@ -3,9 +3,9 @@ Overview
 
 It is Japanese only.
 
-Pokemon management tool using Slack and PHPMyAdmin.
+Pokemon management tool using Slack and MySQL.
 
-SlackとPHPMyadminを使用したポケモン管理ツール．
+SlackとMySQLを使用したポケモン管理ツール．
 
 By sending help with a direct message, you can check how to add Pokemon Trainer and Pokemon you registered.
 
@@ -64,3 +64,5 @@ Thank you for viewing!
 @chooser : SlackのBotkitをWindowsで実行する(https://qiita.com/chooser/items/ba6fa39b12102337c8b3)
 
 Jay Raj : NoSQLじゃなくてMySQLを使いたい！Node.jsのmysqlモジュールの使い方(https://www.webprofessional.jp/using-node-mysql-javascript-client/)
+
+イマジン (id:rikapoke) : ポケモンの種族値データシートの配布【第7世代】(http://rikapoke.hatenablog.jp/entry/pokemon_datasheet_gne7)

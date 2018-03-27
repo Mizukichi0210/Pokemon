@@ -80,7 +80,18 @@ controller.hears(["(ポケモン確認)"], [ 'direct_message' ], (bot, message) 
 });
 
 controller.hears(["(素早さ)"], [ 'direct_message' ], (bot, message) => {
+	var pokemon = message.text.split("\n")[1];
+	var highestSpeed;
+	var highSpeed;
+	var middleSpeed;
 	
+	var sql = "select * from pokedex where name like '%' ? '%'";
+	con.query(sql,[pokemon],function(err,rows,fields){
+		highestSpeed = ((Number(rows[0].speed) + 31/2 + 252/8) + 5) * 1.1 * 1.5;
+		highSpeed = ((Number(rows[0].speed) + 31/2 + 252/8) + 5) * 1.1;
+		middleSpeed = ((Number(rows[0].speed) + 31/2 + 252/8) + 5);
+		bot.reply(message, ">スカーフ最速 : " + highestSpeed + "\n>性格S補正 最速 : " + highSpeed + "\n>性格無補正 最速 : " + middleSpeed);
+	}); 
 });
 
 controller.hears(["(.*)"], [ 'direct_message' ], (bot, message) => {

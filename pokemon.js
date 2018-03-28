@@ -19,7 +19,7 @@ controller.spawn({
 }).startRTM();
 
 controller.hears(["(help)"], ['direct_message'], (bot,message) =>{
-	bot.reply(message,">ポケモン追加\nレベル\nNN\nトレーナー名\n持ち物\n技1\n技2\n技3\n技4\n努力値\n>トレーナー追加\nトレーナー名\nトレーナーID\n>ポケモン確認\nNN\n>素早さ\nポケモン名");
+	bot.reply(message,">ポケモン追加\nレベル\nNN\nトレーナー名\n持ち物\n技1\n技2\n技3\n技4\n努力値\n>トレーナー追加\nトレーナー名\nトレーナーID\n>確認\nNN\n>素早さ\nポケモン名");
 });
 
 controller.hears(["(ポケモン追加)"], [ 'direct_message' ], (bot, message) => {
@@ -74,24 +74,42 @@ controller.hears(["(トレーナー追加)"], [ 'direct_message' ], (bot, messag
 
 });
 
-controller.hears(["(ポケモン確認)"], [ 'direct_message' ], (bot, message) => {
+controller.hears(["(確認)"], [ 'direct_message' ], (bot, message) => {
+	var user_id = message.match[1];
 	var name = message.text.split("\n")[1];
 	var trainer_id = "";
 	var trainer_name = "";
-	var searchSql = 'select * from pokemon where name = ?';
-	con.query(searchSql,[name], function(err, rows, fields){
-		if(err) {
-			 console.log('err: ' + err); 
-		}
-		trainer_id = rows[0].trainer_id;
-		var trainerSql = 'select * from trainer where ID = ?';
-		con.query(trainerSql,[trainer_id], function(err,result,fields){
-			if(err) {
-				console.log('err: ' + err);
-			}
-			trainer_name = result[0].name;
-;
-			bot.reply(message, 'レベル : ' + rows[0].level + '\n トレーナー名 : ' + trainer_name + '\n 持ち物 : ' + rows[0].item + '\n 技1 : ' + rows[0].move1 + '\n 技2 : ' + rows[0].move2 + '\n 技3 : ' + rows[0].move3 + '\n 技4 : ' + rows[0].move4 + '\n 努力値 : ' + rows[0].effort_value);
+	var slackId;
+	
+	controller.storage.users.get(message.user, function (err, user_info) {
+        if (!user_info) {
+            user_info = {
+                id: message.user,
+            };
+
+        }
+        controller.storage.users.save(user_info, function (err, id) {
+			var searchUserid = "select * from users where slack_id = ?";
+			con.query(searchUserid,[user_info.id],function(err,rows,fields){
+				if(err) console.log('err : '+ err);
+				slackId = rows[0].id;
+				
+				var searchSql = 'select * from pokemon where name = ? and users_id = ?';
+				con.query(searchSql,[name,slackId], function(err, rows, fields){
+					if(err) {
+					console.log('err: ' + err); 
+					}
+					trainer_id = rows[0].trainer_id;
+					var trainerSql = 'select * from trainer where ID = ?';
+					con.query(trainerSql,[trainer_id], function(err,result,fields){
+						if(err) {
+							console.log('err: ' + err);
+						}
+						trainer_name = result[0].name;
+						bot.reply(message, 'レベル : ' + rows[0].level + '\n トレーナー名 : ' + trainer_name + '\n 持ち物 : ' + rows[0].item + '\n 技1 : ' + rows[0].move1 + '\n 技2 : ' + rows[0].move2 + '\n 技3 : ' + rows[0].move3 + '\n 技4 : ' + rows[0].move4 + '\n 努力値 : ' + rows[0].effort_value);
+					});
+				});
+			});
 		});
 	});
 });

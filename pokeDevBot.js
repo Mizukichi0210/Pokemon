@@ -19,7 +19,7 @@ controller.spawn({
 }).startRTM();
 
 controller.hears(["(help)"], ['direct_message'], (bot,message) =>{
-	bot.reply(message,"\n>育成論保存\nポケモン名\n該当URL\n>育成論確認\nポケモン名\n>育成論完了\nポケモン名");
+	bot.reply(message,"\n>育成論保存\nポケモン名\n該当URL\n>育成論確認\nポケモン名\n>育成論完了\nポケモン名\n該当URL");
 });
 
 // 気になる育成論の保存．ポケモン1体につき1つまで．
@@ -102,6 +102,7 @@ controller.hears(["(育成論確認)"], [ 'direct_message' ], (bot, message) => 
 
 controller.hears(["(育成論完了)"], [ 'direct_message' ], (bot, message) => {
 	var pokemon = message.text.split("\n")[1];
+	var url = message.text.split("\n")[2];
 	var slackId;
 	var pokemonId;
 	var finished = 1;
@@ -124,8 +125,8 @@ controller.hears(["(育成論完了)"], [ 'direct_message' ], (bot, message) => 
 			con.query(searchPokemonId,[pokemon],function(err, result){
 				pokemonId = result[0].id;
 				
-				var updateDev = "update development_theory set finished = ? where users_id = ? and pokemon_id = ?";
-				con.query(updateDev,[finished,slackId,pokemonId],function(err,rows){
+				var updateDev = "update development_theory set finished = ? where users_id = ? and pokemon_id = ? and url = ?";
+				con.query(updateDev,[finished,slackId,pokemonId,url],function(err,rows){
 					if(err) console.log('err :' + err);
 					bot.reply(message,"変更完了しました!");
 				});

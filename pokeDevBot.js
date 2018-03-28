@@ -19,7 +19,7 @@ controller.spawn({
 }).startRTM();
 
 controller.hears(["(help)"], ['direct_message'], (bot,message) =>{
-	bot.reply(message,"\n>育成論保存\nポケモン名\n該当URL\n>育成論確認\nポケモン名\n>育成論完了\nポケモン名\n該当URL");
+	bot.reply(message,"\n>育成論保存\nポケモン名\n該当URL\n>育成論確認\nポケモン名\n>育成完了\nポケモン名\n該当URL");
 });
 
 // 気になる育成論の保存．
@@ -102,7 +102,7 @@ controller.hears(["(育成論確認)"], [ 'direct_message' ], (bot, message) => 
 
 // 育成完了した育成論の記録．
 
-controller.hears(["(育成論完了)"], [ 'direct_message' ], (bot, message) => {
+controller.hears(["(育成完了)"], [ 'direct_message' ], (bot, message) => {
 	var pokemon = message.text.split("\n")[1];
 	var url = message.text.split("\n")[2];
 	var slackId;

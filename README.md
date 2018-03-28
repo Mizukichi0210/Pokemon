@@ -7,9 +7,13 @@ Pokemon management tool using Slack and MySQL.
 
 SlackとMySQLを使用したポケモン管理ツール．
 
-By sending help with a direct message, you can check how to add Pokemon Trainer and Pokemon you registered.
+In pokemon.js, by sending the corresponding message with a direct message, you can confirm how to add Pokemon Trainer and Pokemon you registered.
 
-ダイレクトメッセージでhelpと送信することで，ポケモン・トレーナーの追加方法とあなたが登録したポケモンの確認が行える．
+pokemon.jsでは，ダイレクトメッセージで該当するメッセージを送信することで，ポケモン・トレーナーの追加方法とあなたが登録したポケモンの確認が行える．
+
+In pokeDevBot.js, by sending the appropriate message, you can add the development theory URL, browse it on the way, complete it.
+
+pokeDevBot.jsでは，該当するメッセージを送ることで，育成論URLの追加，途中の育成論の閲覧，育成論の完了を行える．
 
 ## Description
 As a main objective,use botkit to manage Pokemon used in network play.
@@ -31,6 +35,14 @@ Column: ID (primary key), name(varchar 11), trainer_id(varchar 11)
 table: pokedex
 
 Column: ID (primary key), name(varchar 7), type1(varchar 6), type2, ability1(varchar 10), ability2, hidden_ability, hp(varchar 4), attack, defense, special_attack, special_defense, speed, sum
+
+table: users
+
+column: id(primary key),name(varchar 10),slack_id(varchar 11)
+
+table:development_theory
+
+Column: id(primary key),pokemon_id(varchar 4),users_id(varchar 5),finished(varchar 2),url(text)
 
 ## Requirement
 Slack's workspace

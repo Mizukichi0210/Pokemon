@@ -18,11 +18,14 @@ controller.spawn({
     token : process.env.token
 }).startRTM();
 
+// 何を入力すればよいのかの確認．
 controller.hears(["(help)"], ['direct_message'], (bot,message) =>{
 	bot.reply(message,">ポケモン追加\nレベル\nNN\nトレーナー名\n持ち物\n技1\n技2\n技3\n技4\n努力値\n>トレーナー追加\nトレーナー名\nトレーナーID\n>ポケモン確認\nNN\n>素早さ\nポケモン名");
 });
 
+//  DBにポケモンを追加する．
 controller.hears(["(ポケモン追加)"], [ 'direct_message' ], (bot, message) => {
+	var user_id = message.match[1];
 	var level = message.text.split("\n")[1];
 	var nickname = message.text.split("\n")[2];
 	var trainer = message.text.split("\n")[3];
@@ -34,12 +37,20 @@ controller.hears(["(ポケモン追加)"], [ 'direct_message' ], (bot, message) 
 	var effort_value = message.text.split("\n")[9];
 	var trainer_id;
 	
+	    if (!user_info) {
+			user_info = {
+                id: message.user,
+                name: user_id
+            };
+
+        }
+	
 	var searchTrainerSql = "select * from trainer where name = ?";
 	con.query(searchTrainerSql, [trainer], function(err,result,fields){
 		if(err) console.log('err: ' + err);
 		trainer_id = result[0].ID;
 		
-		var insertSql = "insert into pokemon(level,name,trainer_id,item,move1,move2,move3,move4,effort_value) values (?,?,?,?,?,?,?,?,?)";
+		var insertSql = "insert into pokemon(level,nickname,trainer_id,item,move1,move2,move3,move4,effort_value) values (?,?,?,?,?,?,?,?,?)";
 		con.query(insertSql,[level,nickname,trainer_id,item,move1,move2,move3,move4,effort_value], function(err,res){
 			bot.reply(message,"登録しました！");
 		});
@@ -47,6 +58,7 @@ controller.hears(["(ポケモン追加)"], [ 'direct_message' ], (bot, message) 
 
 });
 
+// DBにトレーナー名を追加する．
 controller.hears(["(トレーナー追加)"], [ 'direct_message' ], (bot, message) => {
 	var name = message.text.split("\n")[1];
 	var trainer_id = message.text.split("\n")[2];
@@ -57,6 +69,7 @@ controller.hears(["(トレーナー追加)"], [ 'direct_message' ], (bot, messag
 
 });
 
+// DBに登録されているポケモンのデータを確認する．
 controller.hears(["(ポケモン確認)"], [ 'direct_message' ], (bot, message) => {
 	var name = message.text.split("\n")[1];
 	var trainer_id = "";

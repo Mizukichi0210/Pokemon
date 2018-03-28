@@ -22,7 +22,7 @@ controller.hears(["(help)"], ['direct_message'], (bot,message) =>{
 	bot.reply(message,"\n>育成論保存\nポケモン名\n該当URL\n>育成論確認\nポケモン名\n>育成論完了\nポケモン名\n該当URL");
 });
 
-// 気になる育成論の保存．ポケモン1体につき1つまで．
+// 気になる育成論の保存．
 
 controller.hears(["(育成論保存)"], [ 'direct_message' ], (bot, message) => {
 	var pokemon = message.text.split("\n")[1];
@@ -87,10 +87,12 @@ controller.hears(["(育成論確認)"], [ 'direct_message' ], (bot, message) => 
 				con.query(searchDev,[pokemonId,slackId,finished],function(err,rows){
 					if(rows[0].cnt == 0) bot.reply(message,"該当する育成途中の育成論はありません.");
 					else {
-						var searchDev = "select * from development_theory where pokemon_id = ? and users_id = ? and finished = ?";
-						con.query(searchDev,[pokemonId,slackId,finished],function(err,res){
-						bot.reply(message,res[0].url);
-						});
+						for(var i = 0;i < rows[0].cnt;i ++){
+							var searchDev = "select * from development_theory where pokemon_id = ? and users_id = ? and finished = ?";
+							con.query(searchDev,[pokemonId,slackId,finished],function(err,res){
+								bot.reply(message,res[Number(i)-1].url);
+							});
+						}
 					}
 				});
 			});

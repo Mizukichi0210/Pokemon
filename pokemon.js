@@ -36,28 +36,32 @@ controller.hears(["(ポケモン追加)"], [ 'direct_message' ], (bot, message) 
 	var effort_value = message.text.split("\n")[9];
 	var trainer_id;
 	
-	if (!user_info) {
-            user_info = {
-                id: message.user,
+	controller.storage.users.get(message.user, function (err, user_info) {
+		if (!user_info) {
+			user_info = {
+				id: message.user,
             };
         }
-	var searchUserid = "select * from users where slack_id = ?";
-	con.query(searchUserid,[user_info.id],function(err,rows,fields){
-		if(err) console.log('err : '+ err);
-		slackId = rows[0].id;
+		controller.storage.users.save(user_info, function (err, id) {
+			var searchUserid = "select * from users where slack_id = ?";
+			con.query(searchUserid,[user_info.id],function(err,rows,fields){
+				if(err) console.log('err : '+ err);
+				slackId = rows[0].id;
 		
-		var searchTrainerSql = "select * from trainer where name = ?";
-		con.query(searchTrainerSql, [trainer], function(err,result,fields){
-			if(err) console.log('err: ' + err);
-			trainer_id = result[0].ID;
+				var searchTrainerSql = "select * from trainer where name = ?";
+				con.query(searchTrainerSql, [trainer], function(err,result,fields){
+					if(err) console.log('err: ' + err);
+					trainer_id = result[0].ID;
 		
-			var insertSql = "insert into pokemon(users_id,level,nickname,trainer_id,item,move1,move2,move3,move4,effort_value) values (?,?,?,?,?,?,?,?,?)";
-			con.query(insertSql,[slackId,level,nickname,trainer_id,item,move1,move2,move3,move4,effort_value], function(err,res){
-				bot.reply(message,"登録しました！");
+					var insertSql = "insert into pokemon(users_id,level,nickname,trainer_id,item,move1,move2,move3,move4,effort_value) values (?,?,?,?,?,?,?,?,?,?)";
+						con.query(insertSql,[slackId,level,nickname,trainer_id,item,move1,move2,move3,move4,effort_value], function(err,res){
+						if(err) console.log(err);
+						bot.reply(message,"登録しました！");
+					});
+				});
 			});
 		});
 	});
-
 });
 
 controller.hears(["(トレーナー追加)"], [ 'direct_message' ], (bot, message) => {

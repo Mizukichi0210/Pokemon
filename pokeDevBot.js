@@ -87,12 +87,12 @@ controller.hears(["(育成論確認)"], [ 'direct_message' ], (bot, message) => 
 				con.query(searchDev,[pokemonId,slackId,finished],function(err,rows){
 					if(rows[0].cnt == 0) bot.reply(message,"該当する育成途中の育成論はありません.");
 					else {
-						for(var i = 0;i < rows[0].cnt;i ++){
-							var searchDev = "select * from development_theory where pokemon_id = ? and users_id = ? and finished = ?";
-							con.query(searchDev,[pokemonId,slackId,finished],function(err,res){
-								bot.reply(message,res[Number(i)-1].url);
-							});
-						}
+						var searchDev = "select * from development_theory where pokemon_id = ? and users_id = ? and finished = ?";
+						con.query(searchDev,[pokemonId,slackId,finished],function(err,res){
+							for(var i in res){
+								bot.reply(message,res[i].url);
+							}
+						});
 					}
 				});
 			});

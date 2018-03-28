@@ -19,8 +19,10 @@ controller.spawn({
 }).startRTM();
 
 controller.hears(["(help)"], ['direct_message'], (bot,message) =>{
-	bot.reply(message,">ポケモン追加\nレベル\nNN\nトレーナー名\n持ち物\n技1\n技2\n技3\n技4\n努力値\n>トレーナー追加\nトレーナー名\nトレーナーID\n>確認\nNN\n>素早さ\nポケモン名");
+	bot.reply(message,">ポケモン追加\nレベル\nNN\nトレーナー名\n持ち物\n技1\n技2\n技3\n技4\n努力値\n>トレーナー追加\nトレーナー名\nトレーナーID\n>ポケモン確認\nNN\n>素早さ\nポケモン名");
 });
+
+// 育成完了したポケモンの保存
 
 controller.hears(["(ポケモン追加)"], [ 'direct_message' ], (bot, message) => {
 	var user_id = message.match[1];
@@ -66,6 +68,8 @@ controller.hears(["(ポケモン追加)"], [ 'direct_message' ], (bot, message) 
 	});
 });
 
+// ポケモンのトレーナーIDとトレーナー名を保存
+
 controller.hears(["(トレーナー追加)"], [ 'direct_message' ], (bot, message) => {
 	var name = message.text.split("\n")[1];
 	var trainer_id = message.text.split("\n")[2];
@@ -76,7 +80,9 @@ controller.hears(["(トレーナー追加)"], [ 'direct_message' ], (bot, messag
 
 });
 
-controller.hears(["(確認)"], [ 'direct_message' ], (bot, message) => {
+// 育成完了したポケモンの確認
+
+controller.hears(["(ポケモン確認)"], [ 'direct_message' ], (bot, message) => {
 	var name = message.text.split("\n")[1];
 	var trainer_id = "";
 	var trainer_name = "";
@@ -116,6 +122,8 @@ controller.hears(["(確認)"], [ 'direct_message' ], (bot, message) => {
 		});
 	});
 });
+
+// 素早さ実数値の確認
 
 controller.hears(["(素早さ)"], [ 'direct_message' ], (bot, message) => {
 	var pokemon = message.text.split("\n")[1];

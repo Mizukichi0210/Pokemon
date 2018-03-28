@@ -24,6 +24,7 @@ controller.hears(["(help)"], ['direct_message'], (bot,message) =>{
 
 controller.hears(["(ポケモン追加)"], [ 'direct_message' ], (bot, message) => {
 	var user_id = message.match[1];
+	var slackId;
 	var level = message.text.split("\n")[1];
 	var nickname = message.text.split("\n")[2];
 	var trainer = message.text.split("\n")[3];
@@ -40,15 +41,20 @@ controller.hears(["(ポケモン追加)"], [ 'direct_message' ], (bot, message) 
                 id: message.user,
             };
         }
-	
-	var searchTrainerSql = "select * from trainer where name = ?";
-	con.query(searchTrainerSql, [trainer], function(err,result,fields){
-		if(err) console.log('err: ' + err);
-		trainer_id = result[0].ID;
+	var searchUserid = "select * from users where slack_id = ?";
+	con.query(searchUserid,[user_info.id],function(err,rows,fields){
+		if(err) console.log('err : '+ err);
+		slackId = rows[0].id;
 		
-		var insertSql = "insert into pokemon(level,nickname,trainer_id,item,move1,move2,move3,move4,effort_value) values (?,?,?,?,?,?,?,?,?)";
-		con.query(insertSql,[level,nickname,trainer_id,item,move1,move2,move3,move4,effort_value], function(err,res){
-			bot.reply(message,"登録しました！");
+		var searchTrainerSql = "select * from trainer where name = ?";
+		con.query(searchTrainerSql, [trainer], function(err,result,fields){
+			if(err) console.log('err: ' + err);
+			trainer_id = result[0].ID;
+		
+			var insertSql = "insert into pokemon(users_id,level,nickname,trainer_id,item,move1,move2,move3,move4,effort_value) values (?,?,?,?,?,?,?,?,?)";
+			con.query(insertSql,[slackId,level,nickname,trainer_id,item,move1,move2,move3,move4,effort_value], function(err,res){
+				bot.reply(message,"登録しました！");
+			});
 		});
 	});
 

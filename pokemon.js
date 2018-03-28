@@ -75,7 +75,6 @@ controller.hears(["(トレーナー追加)"], [ 'direct_message' ], (bot, messag
 });
 
 controller.hears(["(確認)"], [ 'direct_message' ], (bot, message) => {
-	var user_id = message.match[1];
 	var name = message.text.split("\n")[1];
 	var trainer_id = "";
 	var trainer_name = "";
@@ -91,22 +90,22 @@ controller.hears(["(確認)"], [ 'direct_message' ], (bot, message) => {
         controller.storage.users.save(user_info, function (err, id) {
 			var searchUserid = "select * from users where slack_id = ?";
 			con.query(searchUserid,[user_info.id],function(err,rows,fields){
-				if(err) console.log('err : '+ err);
+				if(err) console.log('err0: '+ err);
 				slackId = rows[0].id;
 				
-				var searchSql = 'select * from pokemon where name = ? and users_id = ?';
+				var searchSql = 'select * from pokemon where nickname = ? and users_id = ?';
 				con.query(searchSql,[name,slackId], function(err, rows, fields){
 					if(err) {
-					console.log('err: ' + err); 
+					console.log('err1: ' + err); 
 					}
 					trainer_id = rows[0].trainer_id;
 					var trainerSql = 'select * from trainer where ID = ?';
 					con.query(trainerSql,[trainer_id], function(err,result,fields){
 						if(err) {
-							console.log('err: ' + err);
+							console.log('err2: ' + err);
 						}
 						trainer_name = result[0].name;
-						bot.reply(message, 'レベル : ' + rows[0].level + '\n トレーナー名 : ' + trainer_name + '\n 持ち物 : ' + rows[0].item + '\n 技1 : ' + rows[0].move1 + '\n 技2 : ' + rows[0].move2 + '\n 技3 : ' + rows[0].move3 + '\n 技4 : ' + rows[0].move4 + '\n 努力値 : ' + rows[0].effort_value);
+						bot.reply(message, 'レベル : *' + rows[0].level + '*\n トレーナー名 : *' + trainer_name + '*\n 持ち物 : *' + rows[0].item + '*\n 技1 : *' + rows[0].move1 + '*\n 技2 : *' + rows[0].move2 + '*\n 技3 : *' + rows[0].move3 + '*\n 技4 : *' + rows[0].move4 + '*\n 努力値 : *' + rows[0].effort_value + '*');
 					});
 				});
 			});

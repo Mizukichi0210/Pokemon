@@ -19,7 +19,7 @@ controller.spawn({
 }).startRTM();
 
 controller.hears(["(help)"], ['direct_message'], (bot,message) =>{
-	bot.reply(message,"\n>育成論保存\nポケモン名\n該当URL\n>育成論確認\nポケモン名\n>育成完了\nポケモン名\n該当URL");
+	bot.reply(message,"\n>育成論保存\nポケモン名\n該当URL\n>育成論確認\nポケモン名\n>育成完了\nポケモン名\n該当URL\n>育成論一覧");
 });
 
 // 気になる育成論の保存．
@@ -95,6 +95,36 @@ controller.hears(["(育成論確認)"], [ 'direct_message' ], (bot, message) => 
 						});
 					}
 				});
+			});
+		});
+	});
+});
+
+// 保存し，未作成の育成論チェック
+
+controller.hears(["(育成論一覧)"], [ 'direct_message' ], (bot, message) => {
+	var usersId;
+	var finished = 0;
+	
+	controller.storage.users.get(message.user, function (err, user_info) {
+        if (!user_info) {
+            user_info = {
+                id: message.user,
+            };
+
+        }
+        controller.storage.users.save(user_info, function (err, id) {
+		});
+		var searchUserid = "select * from users where slack_id = ?";
+		con.query(searchUserid,[user_info.id],function(err,rows,fields){
+			if(err) console.log('err : '+ err);
+			usersId = rows[0].id;
+			
+			var searchDev = "select * from development_theory where users_id = ? and finished = ?";
+			con.query(searchDev,[usersId,finished],function(err,result){
+				for(var i in result){
+					bot.reply(message,result[i].url + "\n");
+				}
 			});
 		});
 	});

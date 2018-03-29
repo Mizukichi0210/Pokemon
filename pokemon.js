@@ -19,7 +19,7 @@ controller.spawn({
 }).startRTM();
 
 controller.hears(["(help)"], ['direct_message'], (bot,message) =>{
-	bot.reply(message,">ポケモン追加\nレベル\nNN\nトレーナー名\n持ち物\n技1\n技2\n技3\n技4\n努力値\n>トレーナー追加\nトレーナー名\nトレーナーID\n>ポケモン確認\nNN\n>素早さ\nポケモン名");
+	bot.reply(message,">ポケモン追加\nレベル\nNN\nトレーナー名\n持ち物\n技1\n技2\n技3\n技4\n努力値\n>トレーナー追加\nトレーナー名\nトレーナーID\n>ポケモン確認\nNN\n>防御 or 特防\nポケモン名\n>素早さ\nポケモン名");
 });
 
 // 育成完了したポケモンの保存
@@ -120,6 +120,21 @@ controller.hears(["(ポケモン確認)"], [ 'direct_message' ], (bot, message) 
 					});
 			});
 		});
+	});
+});
+
+//防御・特防の種族値確認
+
+controller.hears(["(防御),(特防)")"], [ 'direct_message' ], (bot, message) => {
+	var pokemon = message.text.split("\n")[1];
+	var defense;
+	var specialDefense;
+	
+	var sql = "select * from pokedex where name like '%' ? '%'";
+	con.query(sql,[pokemon],function(err,rows,fields){
+		defense = rows[0].defense;
+		specialDefense = rows[0].special_defense;
+		bot.reply(message,"防御種族値 : *" + defense + "*\n特防種族値 : *" + special_defense + "*");
 	});
 });
 

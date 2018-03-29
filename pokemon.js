@@ -125,7 +125,7 @@ controller.hears(["(ポケモン確認)"], [ 'direct_message' ], (bot, message) 
 
 //防御・特防の種族値確認
 
-controller.hears(["(防御),(特防)")"], [ 'direct_message' ], (bot, message) => {
+controller.hears(["(防御)","(特防)"], [ 'direct_message' ], (bot, message) => {
 	var pokemon = message.text.split("\n")[1];
 	var defense;
 	var specialDefense;
@@ -134,7 +134,7 @@ controller.hears(["(防御),(特防)")"], [ 'direct_message' ], (bot, message) =
 	con.query(sql,[pokemon],function(err,rows,fields){
 		defense = rows[0].defense;
 		specialDefense = rows[0].special_defense;
-		bot.reply(message,"防御種族値 : *" + defense + "*\n特防種族値 : *" + special_defense + "*");
+		bot.reply(message,"防御種族値 : *" + defense + "*\n特防種族値 : *" + specialDefense + "*");
 	});
 });
 

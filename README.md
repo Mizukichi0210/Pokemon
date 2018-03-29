@@ -1,28 +1,17 @@
 # Pokemon Management Tool
 Overview
 
-It is Japanese only.
-
-Pokemon management tool using Slack and MySQL.
-
 SlackとMySQLを使用したポケモン管理ツール．
 
-In pokemon.js, by sending the corresponding message with a direct message, you can confirm how to add Pokemon Trainer and Pokemon you registered.
-
 pokemon.jsでは，ダイレクトメッセージで該当するメッセージを送信することで，ポケモン・トレーナーの追加方法とあなたが登録したポケモンの確認が行える．
-
-In pokeDevBot.js, by sending the appropriate message, you can add the development theory URL, browse it on the way, complete it.
 
 pokeDevBot.jsでは，該当するメッセージを送ることで，育成論URLの追加，途中の育成論の閲覧，育成論の完了を行える．
 
 ## Description
-As a main objective,use botkit to manage Pokemon used in network play.
 
-主目的として，ネット対戦で使用するポケモンの管理をBotkitを使って行う．
+botkitを使用したSlackのBotでポケモン関係のデータの閲覧・管理を行う事を主目的としている．
 
-The database structure is as follows.
-
-データベース構成は以下の通り．
+使用しているデータベース構成は以下の通り．
 
 table: pokemon
 
@@ -67,13 +56,9 @@ https://github.com/Mizukichi0210
 Twitter(https://twitter.com/mizukichi_0210)
 
 ## Finally
-Sorry for my poor English.
-
-Thank you for viewing!
-
-日本語が書けることを知ったので，日本語を追加しました．
 
 あまり使えるようなものではありませんが，最後まで閲覧ありがとうございます．
+iPhoneやAndroidのSlackアプリ，Windows for Slackと全て一緒に使えるのが利点かなーと思っています．
 
 ## References
 @potato4d : Botkitを利用してSlack上の発言からGitHubのIssueを作成するBotを作る(https://qiita.com/potato4d/items/81e9e8aef6cd57c234af)

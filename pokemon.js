@@ -36,7 +36,6 @@ controller.hears(["(ポケモン追加)"], [ 'direct_message' ], (bot, message) 
 	var move3 = message.text.split("\n")[7];
 	var move4 = message.text.split("\n")[8];
 	var effort_value = message.text.split("\n")[9];
-	var trainer_id;
 	
 	controller.storage.users.get(message.user, function (err, user_info) {
 		if (!user_info) {
@@ -46,23 +45,28 @@ controller.hears(["(ポケモン追加)"], [ 'direct_message' ], (bot, message) 
         }
 		
 		controller.storage.users.save(user_info, function (err, id) {
+			slackId = user_info.id;
 		});
+	});
 		
-		var searchUserid = "select * from users where slack_id = ?";
-		con.query(searchUserid,[user_info.id],function(err,rows,fields){
-			if(err) console.log('err : '+ err);
-			slackId = rows[0].id;
+	// ↓　ユーザデータが登録されているかチェック
 		
-			var searchTrainerSql = "select * from trainer where name = ?";
-			con.query(searchTrainerSql, [trainer], function(err,result,fields){
-				if(err) console.log('err: ' + err);
-				trainer_id = result[0].ID;
+	var searchUserid = "select *,count(*) as cnt from users where slack_id = ?";
+	con.query(searchUserid,[slackId],function(err,rows,fields){
+		if(rows[0].cnt) bot.reply(message,"ユーザデータが登録されていません!");
 		
-				var insertSql = "insert into pokemon(users_id,level,nickname,trainer_id,item,move1,move2,move3,move4,effort_value) values (?,?,?,?,?,?,?,?,?,?)";
-					con.query(insertSql,[slackId,level,nickname,trainer_id,item,move1,move2,move3,move4,effort_value], function(err,res){
-					if(err) console.log(err);
-					bot.reply(message,"登録しました！");
-				});
+		// ↓　
+		
+		var searchTrainerSql = "select *,count(*) as cnt from trainer where name = ?";
+		con.query(searchTrainerSql, [trainer], function(err,result,fields){
+			if(result[0].cnt) {
+				bot.reply(message,"トレーナー名が間違っています!");
+				return;
+			}
+			var insertSql = "insert into pokemon(users_id,level,nickname,trainer_id,item,move1,move2,move3,move4,effort_value) values (?,?,?,?,?,?,?,?,?,?)";
+				con.query(insertSql,[rows[0].id,level,nickname,result[0].ID,item,move1,move2,move3,move4,effort_value], function(err,res){
+				if(err) console.log(err);
+				bot.reply(message,"登録しました！");
 			});
 		});
 	});

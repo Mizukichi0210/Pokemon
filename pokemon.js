@@ -129,12 +129,12 @@ controller.hears(["(ポケモン確認)"], [ 'direct_message' ], (bot, message) 
 			return;
 		}
 		
-		// ↓ ポケモンが登録されているかチェック　=>　pokemonテーブルからトレーナーidを取得
+		// ↓  ニックネームが登録されているかチェック => pokemonテーブルからトレーナーidを取得
 		
 		var searchSql = 'select *,count(*) as cntPoke from pokemon where nickname = ? and users_id = ?';
 		con.query(searchSql,[name,rows[0].id], function(err, rows, fields){
-			if(rows[0].cntPoke == 0) {
-				bot.reply(message,"該当ニックネームのポケモンは未登録です!");
+			if(rows[0].cntPoke == 0){
+				bot.reply(message,"該当ニックネームが登録されていません!");
 				return;
 			}
 

@@ -144,7 +144,7 @@ controller.hears(["(育成論一覧)"], [ 'direct_message' ], (bot, message) => 
 		}
 			
 		var searchDev = "select *,count(*) as cntpokeTheory from development_theory where users_id = ? and finished = ?";
-		con.query(searchDev,[rows[0].id;,finished],function(err,result){
+		con.query(searchDev,[rows[0].id,finished],function(err,result){
 			if(result[0].cntpokeTheory == 0){
 				bot.reply(message,"育成論はありません");
 				return;

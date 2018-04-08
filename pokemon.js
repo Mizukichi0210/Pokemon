@@ -77,6 +77,16 @@ controller.hears(["(ポケモン追加)"], [ 'direct_message' ], (bot, message) 
 controller.hears(["(トレーナー追加)"], [ 'direct_message' ], (bot, message) => {
 	var name = message.text.split("\n")[1];
 	var trainer_id = message.text.split("\n")[2];
+	
+	// トレーナー名とトレーナーIDが入力されているかチェック
+	
+	if(name == undefined || trainer_id == undefined || isNaN(trainer_id)){
+		bot.reply(message,"トレーナー名が入力されていないか、トレーナーIDが数字ではありません");
+		return;
+	}
+	
+	// データをtrainerテーブルへinsert
+	
 	var insertSql = "insert into trainer(name,trainer_id) values (?,?)";
 	con.query(insertSql,[name,trainer_id], function(err,res){
 		bot.reply(message,"登録しました！");
@@ -88,9 +98,14 @@ controller.hears(["(トレーナー追加)"], [ 'direct_message' ], (bot, messag
 
 controller.hears(["(ポケモン確認)"], [ 'direct_message' ], (bot, message) => {
 	var name = message.text.split("\n")[1];
-	var trainer_id = "";
-	var trainer_name = "";
 	var slackId;
+	
+	// ポケモン名が入力されているかチェック
+	
+	if(name == undefined){
+		bot.reply(message,"ポケモン名が追加されていません!");
+		return;
+	}
 	
 	controller.storage.users.get(message.user, function (err, user_info) {
         if (!user_info) {
@@ -101,27 +116,38 @@ controller.hears(["(ポケモン確認)"], [ 'direct_message' ], (bot, message) 
         }
 		
         controller.storage.users.save(user_info, function (err, id) {
+			slackId = user_info.id;
 		});
+	});
+	
+	// ↓　ユーザデータが登録されているかチェック　=>　usersテーブルから主キーを取得
+	
+	var searchUserid = "select *,count(*) as cntUserId from users where slack_id = ?";
+	con.query(searchUserid,[slackId],function(err,rows,fields){
+		if(rows[0].cntUserId == 0){
+			bot.reply(message,"ユーザデータが登録されていません!");
+			return;
+		}
 		
-		var searchUserid = "select * from users where slack_id = ?";
-		con.query(searchUserid,[user_info.id],function(err,rows,fields){
-			if(err) console.log('err0: '+ err);
-			slackId = rows[0].id;
-				
-			var searchSql = 'select * from pokemon where nickname = ? and users_id = ?';
-			con.query(searchSql,[name,slackId], function(err, rows, fields){
-				if(err) {
-				console.log('err1: ' + err); 
+		// ↓ ポケモンが登録されているかチェック　=>　pokemonテーブルからトレーナーidを取得
+		
+		var searchSql = 'select *,count(*) as cntPoke from pokemon where nickname = ? and users_id = ?';
+		con.query(searchSql,[name,rows[0].id], function(err, rows, fields){
+			if(rows[0].cntPoke == 0) {
+				bot.reply(message,"該当ニックネームのポケモンは未登録です!");
+				return;
+			}
+
+			// トレーナー名が登録されているかチェック　=> trainerテーブルに登録されているトレーナー名を取得
+			
+			var trainerSql = 'select *,count(*) as cntTrainer from trainer where ID = ?';
+			con.query(trainerSql,[rows[0].trainer_id], function(err,result,fields){
+				if(cntTrainer == 0) {
+					bot.reply(message,"トレーナー名が未登録です");
+					return;
 				}
-				trainer_id = rows[0].trainer_id;
-				var trainerSql = 'select * from trainer where ID = ?';
-				con.query(trainerSql,[trainer_id], function(err,result,fields){
-					if(err) {
-						console.log('err2: ' + err);
-					}
-					trainer_name = result[0].name;
-				bot.reply(message, 'レベル : *' + rows[0].level + '*\n トレーナー名 : *' + trainer_name + '*\n 持ち物 : *' + rows[0].item + '*\n 技1 : *' + rows[0].move1 + '*\n 技2 : *' + rows[0].move2 + '*\n 技3 : *' + rows[0].move3 + '*\n 技4 : *' + rows[0].move4 + '*\n 努力値 : *' + rows[0].effort_value + '*');
-					});
+
+			bot.reply(message, 'レベル : *' + rows[0].level + '*\n トレーナー名 : *' + result[0].name + '*\n 持ち物 : *' + rows[0].item + '*\n 技1 : *' + rows[0].move1 + '*\n 技2 : *' + rows[0].move2 + '*\n 技3 : *' + rows[0].move3 + '*\n 技4 : *' + rows[0].move4 + '*\n 努力値 : *' + rows[0].effort_value + '*');
 			});
 		});
 	});
@@ -131,14 +157,18 @@ controller.hears(["(ポケモン確認)"], [ 'direct_message' ], (bot, message) 
 
 controller.hears(["(防御)","(特防)"], [ 'direct_message' ], (bot, message) => {
 	var pokemon = message.text.split("\n")[1];
-	var defense;
-	var specialDefense;
+	if(pokemon == undefined){
+		bot.reply(message,"2行目にポケモン名を入力してください!");
+		return;
+	}
 	
-	var sql = "select * from pokedex where name like '%' ? '%'";
+	var sql = "select *,count(*) as cntPoke from pokedex where name like '%' ? '%'";
 	con.query(sql,[pokemon],function(err,rows,fields){
-		defense = rows[0].defense;
-		specialDefense = rows[0].special_defense;
-		bot.reply(message,"防御種族値 : *" + defense + "*\n特防種族値 : *" + specialDefense + "*");
+		if(rows[0].cntPoke == 0){
+			bot.reply(message,"ポケモン名が登録されていません!");
+			return;
+		}
+		bot.reply(message,"防御種族値 : *" + rows[0].defense + "*\n特防種族値 : *" + rows[0].special_defense + "*");
 	});
 });
 
@@ -151,8 +181,17 @@ controller.hears(["(素早さ)"], [ 'direct_message' ], (bot, message) => {
 	var fastSpeed;
 	var semiSpeed;
 	
-	var sql = "select * from pokedex where name like '%' ? '%'";
+	if(pokemon == undefined){
+		bot.reply(message,"2行目にポケモン名を入力してください!");
+		return;
+	}
+	
+	var sql = "select *,count(*) as cntPoke from pokedex where name like '%' ? '%'";
 	con.query(sql,[pokemon],function(err,rows,fields){
+		if(rows[0].cntPoke == 0){
+			bot.reply(message,"ポケモン名が登録されていません!");
+			return;
+		}
 		fastestScarf = Math.floor(((Number(rows[0].speed) + 31/2 + 252/8) + 5) * 1.1 * 1.5);
 		fastSpeed = Math.floor(((Number(rows[0].speed) + 31/2 + 252/8) + 5) * 1.1);
 		semiSpeedScarf = Math.floor(((Number(rows[0].speed) +31/2 + 252/8) + 5) * 1.5);

@@ -103,7 +103,7 @@ controller.hears(["(ポケモン確認)"], [ 'direct_message' ], (bot, message) 
 	// ポケモン名が入力されているかチェック
 	
 	if(name == undefined){
-		bot.reply(message,"ポケモン名が追加されていません!");
+		bot.reply(message,"ポケモン名が入力されていません!");
 		return;
 	}
 	

@@ -28,7 +28,6 @@ controller.hears(["(育成論保存)"], [ 'direct_message' ], (bot, message) => 
 	var pokemon = message.text.split("\n")[1];
 	var url = message.text.split("\n")[2];
 	var slackId;
-	var pokemonId;
 	var finished = 0;
 	
 	controller.storage.users.get(message.user, function (err, user_info) {
@@ -39,20 +38,27 @@ controller.hears(["(育成論保存)"], [ 'direct_message' ], (bot, message) => 
 
         }
         controller.storage.users.save(user_info, function (err, id) {
+			slackId = user_info.id;
 		});
-		var searchUserid = "select * from users where slack_id = ?";
-		con.query(searchUserid,[user_info.id],function(err,rows,fields){
-			if(err) console.log('err : '+ err);
-			slackId = rows[0].id;
-			
-			var searchPokemonId = "select * from pokedex where name = ?";
-			con.query(searchPokemonId,[pokemon],function(err, result){
-				pokemonId = result[0].id;
-				
-				var insertDevelopmentTheory = "insert into development_theory(pokemon_id,users_id,finished,url) values (?,?,?,?)";
-				con.query(insertDevelopmentTheory,[pokemonId,slackId,finished,url],function(err,res){
-					bot.reply(message,"登録完了しました．");
-				});
+	});
+	var searchUserid = "select *,count(*) as cntUsersId from users where slack_id = ?";
+	con.query(searchUserid,[slackId],function(err,rows,fields){
+		if(rows[0].cntUsersId == 0){
+				bot.reply(message,"ユーザデータが登録されていません!");
+				return;
+		}
+		
+		// ↓ pokedexテーブルに入力ポケモン名が追加されているかチェック => pokedexの主キー取得
+		
+		var searchPokemonId = "select *,count(*) as cntPoke from pokedex where name = ?";
+		con.query(searchPokemonId,[pokemon],function(err, result){
+			if(result[0].cntPoke == 0){
+				bot.reply(message,"ポケモン名が間違っているか登録されていません!");
+				return;
+			}
+			var insertDevelopmentTheory = "insert into development_theory(pokemon_id,users_id,finished,url) values (?,?,?,?)";
+			con.query(insertDevelopmentTheory,[result[0].id,rows[0].id,finished,url],function(err,res){
+				bot.reply(message,"登録完了しました．");
 			});
 		});
 	});
@@ -74,25 +80,38 @@ controller.hears(["(育成論確認)"], [ 'direct_message' ], (bot, message) => 
 
         }
         controller.storage.users.save(user_info, function (err, id) {
+			slackId = user_info.id;
 		});
-		var searchUserid = "select * from users where slack_id = ?";
-		con.query(searchUserid,[user_info.id],function(err,rows,fields){
-			if(err) console.log('err : '+ err);
-			slackId = rows[0].id;
+	});
+	var searchUserid = "select *,count(*) as cntUsersId from users where slack_id = ?";
+	con.query(searchUserid,[slackId],function(err,rows,fields){
+		if(rows[0].cntUsersId == 0){
+			bot.reply(message,"ユーザデータが登録されていません!");
+			return;
+		}
 			
-			var searchPokemonId = "select * from pokedex where name = ?";
+		var searchPokemonId = "select *,count(*) as cntPoke from pokedex where name = ?";
 			con.query(searchPokemonId,[pokemon],function(err, result){
-				pokemonId = result[0].id;
-				var searchDev = "select count(*) as cnt from development_theory where pokemon_id = ? and users_id = ? and finished = ?";
-				con.query(searchDev,[pokemonId,slackId,finished],function(err,rows){
-					if(rows[0].cnt == 0) bot.reply(message,"該当する育成途中の育成論はありません.");
-					else {
-						var searchDev = "select * from development_theory where pokemon_id = ? and users_id = ? and finished = ?";
-						con.query(searchDev,[pokemonId,slackId,finished],function(err,res){
-							for(var i in res){
-								bot.reply(message,res[i].url);
-							}
-						});
+			if(result[0].cntPoke == 0){
+				bot.reply(message,"ポケモン名が間違っているか登録されていません!");
+				return;
+			}
+			
+			var searchDev = "select count(*) as cnt from development_theory where pokemon_id = ? and users_id = ? and finished = ?";
+			con.query(searchDev,[result[0].id,rows[0].id,finished],function(err,rows){
+				if(rows[0].cnt == 0){
+					bot.reply(message,"該当する育成途中の育成論はありません.");
+					return;
+				}
+
+				var searchDev = "select *,count(*) as cntTheory from development_theory where pokemon_id = ? and users_id = ? and finished = ?";
+				con.query(searchDev,[result[0].id,rows[0].id,finished],function(err,res){
+					if(res[0].cntTheory == 0){
+						bot.reply(message,"該当育成論はありません!");
+						return;
+					}
+					for(var i in res){
+						bot.reply(message,res[i].url);
 					}
 				});
 			});
@@ -103,7 +122,7 @@ controller.hears(["(育成論確認)"], [ 'direct_message' ], (bot, message) => 
 // 保存し，未作成の育成論チェック
 
 controller.hears(["(育成論一覧)"], [ 'direct_message' ], (bot, message) => {
-	var usersId;
+	var slackId;
 	var finished = 0;
 	
 	controller.storage.users.get(message.user, function (err, user_info) {
@@ -114,18 +133,25 @@ controller.hears(["(育成論一覧)"], [ 'direct_message' ], (bot, message) => 
 
         }
         controller.storage.users.save(user_info, function (err, id) {
+			slackId = user_info.id;
 		});
-		var searchUserid = "select * from users where slack_id = ?";
-		con.query(searchUserid,[user_info.id],function(err,rows,fields){
-			if(err) console.log('err : '+ err);
-			usersId = rows[0].id;
+	});
+	var searchUserid = "select *,count(*) as cntUsersId from users where slack_id = ?";
+	con.query(searchUserid,[slackId],function(err,rows,fields){
+		if(rows[0].cntUsersId == 0){
+			bot.reply(message,"ユーザデータが登録されていません!");
+			return;
+		}
 			
-			var searchDev = "select * from development_theory where users_id = ? and finished = ?";
-			con.query(searchDev,[usersId,finished],function(err,result){
-				for(var i in result){
-					bot.reply(message,result[i].url + "\n");
-				}
-			});
+		var searchDev = "select *,count(*) as cntpokeTheory from development_theory where users_id = ? and finished = ?";
+		con.query(searchDev,[rows[0].id;,finished],function(err,result){
+			if(result[0].cntpokeTheory == 0){
+				bot.reply(message,"育成論はありません");
+				return;
+			}
+			for(var i in result){
+				bot.reply(message,result[i].url + "\n");
+			}
 		});
 	});
 });
@@ -136,8 +162,12 @@ controller.hears(["(育成完了)"], [ 'direct_message' ], (bot, message) => {
 	var pokemon = message.text.split("\n")[1];
 	var url = message.text.split("\n")[2];
 	var slackId;
-	var pokemonId;
 	var finished = 1;
+	
+	if(pokemon == undefined || url == undefined){
+		bot.reply(message,"2行目にポケモン名、3行目に該当urlを入力してください!");
+		return;
+	}
 	
 	controller.storage.users.get(message.user, function (err, user_info) {
         if (!user_info) {
@@ -147,21 +177,27 @@ controller.hears(["(育成完了)"], [ 'direct_message' ], (bot, message) => {
 
         }
         controller.storage.users.save(user_info, function (err, id) {
+			slackId = user_info.id;
 		});
-		var searchUserid = "select * from users where slack_id = ?";
-		con.query(searchUserid,[user_info.id],function(err,rows,fields){
-			if(err) console.log('err : '+ err);
-			slackId = rows[0].id;
+	});
+	var searchUserid = "select *,count(*) as cntUsersId from users where slack_id = ?";
+	con.query(searchUserid,[user_info.id],function(err,rows,fields){
+		if(rows[0].cntUsersId == 0){
+			bot.reply(message,"ユーザデータが登録されていません!");
+			return;
+		}
 			
-			var searchPokemonId = "select * from pokedex where name = ?";
-			con.query(searchPokemonId,[pokemon],function(err, result){
-				pokemonId = result[0].id;
+		var searchPokemonId = "select *,count(*) as cntPoke from pokedex where name = ?";
+		con.query(searchPokemonId,[pokemon],function(err, result){
+			if(result[0].cntPoke == 0){
+				bot.reply(message,"該当ポケモンがpokedexに登録されていません");
+				return;
+			}
 				
-				var updateDev = "update development_theory set finished = ? where users_id = ? and pokemon_id = ? and url = ?";
-				con.query(updateDev,[finished,slackId,pokemonId,url],function(err,rows){
-					if(err) console.log('err :' + err);
-					bot.reply(message,"変更完了しました!");
-				});
+			var updateDev = "update development_theory set finished = ? where users_id = ? and pokemon_id = ? and url = ?";
+			con.query(updateDev,[finished,rows[0].id,result[0].id,url],function(err,rows){
+				if(err) console.log('err :' + err);
+				bot.reply(message,"変更完了しました!");
 			});
 		});
 	});

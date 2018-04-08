@@ -138,15 +138,10 @@ controller.hears(["(ポケモン確認)"], [ 'direct_message' ], (bot, message) 
 				return;
 			}
 
-			// トレーナー名が登録されているかチェック　=> trainerテーブルに登録されているトレーナー名を取得
+			// trainerテーブルに登録されているトレーナー名を取得
 			
 			var trainerSql = 'select *,count(*) as cntTrainer from trainer where ID = ?';
 			con.query(trainerSql,[rows[0].trainer_id], function(err,result,fields){
-				if(cntTrainer == 0) {
-					bot.reply(message,"トレーナー名が未登録です");
-					return;
-				}
-
 			bot.reply(message, 'レベル : *' + rows[0].level + '*\n トレーナー名 : *' + result[0].name + '*\n 持ち物 : *' + rows[0].item + '*\n 技1 : *' + rows[0].move1 + '*\n 技2 : *' + rows[0].move2 + '*\n 技3 : *' + rows[0].move3 + '*\n 技4 : *' + rows[0].move4 + '*\n 努力値 : *' + rows[0].effort_value + '*');
 			});
 		});

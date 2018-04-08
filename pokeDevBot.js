@@ -30,6 +30,11 @@ controller.hears(["(育成論保存)"], [ 'direct_message' ], (bot, message) => 
 	var slackId;
 	var finished = 0;
 	
+	if(pokemon == undefined || url == undefined){
+		bot.reply(message,"2行目にポケモン名、3行目に該当urlを入力してください");
+		return;
+	}
+	
 	controller.storage.users.get(message.user, function (err, user_info) {
         if (!user_info) {
             user_info = {
@@ -71,6 +76,11 @@ controller.hears(["(育成論確認)"], [ 'direct_message' ], (bot, message) => 
 	var slackId;
 	var pokemonId;
 	var finished = 0;
+	
+	if(pokemon == undefined){
+		bot.reply(message,"2行目にポケモン名を入力してください");
+		return;
+	}
 	
 	controller.storage.users.get(message.user, function (err, user_info) {
         if (!user_info) {
